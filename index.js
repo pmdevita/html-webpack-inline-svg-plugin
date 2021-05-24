@@ -167,7 +167,10 @@ class HtmlWebpackInlineSVGPlugin {
                 // iterate over each file and inline it's SVGs
                 // then return a callback if available
 
-                return Promise.all(this.files.map(file => this.processImages(file.originalHtml)))
+                return Promise.all(this.files.map(file => {
+                    let data = fs.readFileSync(path.resolve(this.outputPath, file.filename), "utf-8");
+                    this.processImages(data);
+                }))
                     .then((htmlArray) => Promise.all(htmlArray.map((html, index) => this.updateOutputFile(html, this.files[index].filename))))
                     .then(() => typeof callback === 'function' ? callback() : null)
                     .catch((err) => console.log(chalk.red(err)))
