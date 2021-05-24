@@ -169,7 +169,7 @@ class HtmlWebpackInlineSVGPlugin {
 
                 return Promise.all(this.files.map(file => {
                     let data = fs.readFileSync(path.resolve(this.outputPath, file.filename), "utf-8");
-                    this.processImages(data);
+                    return this.processImages(data);
                 }))
                     .then((htmlArray) => Promise.all(htmlArray.map((html, index) => this.updateOutputFile(html, this.files[index].filename))))
                     .then(() => typeof callback === 'function' ? callback() : null)
@@ -185,7 +185,7 @@ class HtmlWebpackInlineSVGPlugin {
     /**
      * DEPRECATED: svgoConfig option must now go inside HtmlWebpackInlineSVGPlugin({}) instead of HtmlWebpackPlugin({}).
      * This method will be removed in future releases.
-     * 
+     *
      * get the users custom config
      * @param {Object} htmlPluginData
      *
@@ -482,7 +482,7 @@ class HtmlWebpackInlineSVGPlugin {
         const svgoDefaultConfig = [
             { cleanupIDs: false }
         ]
-        
+
         const svgoDefaultConfigFiltered = svgoDefaultConfig.filter(di =>
             !this.svgoConfig.some(i => Object.keys(di)[0] === Object.keys(i)[0])
         )
